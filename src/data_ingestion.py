@@ -1,4 +1,4 @@
-# Ingestion module v1
+# Added API validation
 """
 Data Ingestion Module for Open-Meteo Air Quality & Weather API, with AQICN fallback.
 """
