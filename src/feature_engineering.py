@@ -1,4 +1,4 @@
-# Trigonometric time encodings
+# Multi-lag features
 """
 Feature Engineering Engine for AQI Prediction:
 - Cyclical temporal transforms (hour_sin, hour_cos, day_of_week, month)
