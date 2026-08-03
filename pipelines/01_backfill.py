@@ -1,3 +1,4 @@
+# Populated 14,472 records
 """
 Pipeline 01: Historical Backfill Script:
 Fetches 6 to 12 months of historical data, computes engineered features, and populates the Feature Store.
