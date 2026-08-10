@@ -1,4 +1,4 @@
-# Direct Forecaster
+# XGBoost & RF
 """
 Model Training & Experimentation Engine:
 - Multi-Model Benchmarking (Ridge Regression, Random Forest, XGBoost, LightGBM)
