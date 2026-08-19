@@ -1,4 +1,4 @@
-# Hazard alerts
+# Alert tests
 """
 Automated Alert Dispatcher for Hazardous AQI Conditions:
 Supports Telegram Bot Webhooks, Discord Webhooks, and Console Notifications.
