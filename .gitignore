@@ -1,41 +1,35 @@
-# Python cache
+# Environment and Secrets
+.env
+.env.local
+*.env
+
+# Python artifacts
 __pycache__/
 *.py[cod]
-*$py.class
-
-# Virtual environments
-venv/
-.venv/
-env/
-
-# Environment variables
-.env
-
-# Jupyter Notebook
-.ipynb_checkpoints/
-
-# Logs
-logs/
-*.log
-
-# Test / Coverage
+*.class
+*.so
 .pytest_cache/
 .coverage
 htmlcov/
 
-# Build files
-build/
-dist/
-*.egg-info/
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
 
-# IDE
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE & OS
 .vscode/
 .idea/
-
-# OS files
 .DS_Store
 Thumbs.db
 
-# Python version manager
-.python-version
-
+# Logs & Temporary Files
+*.log
+logs/
+extended_features/
+scratch/
+temp/
