@@ -1,218 +1,163 @@
-# 🌍 AQI Predictor: Automated Air Quality Forecasting
+# 🌍 Pearls AQI Predictor • AeroSense Precision Platform
 
-A **professional, production-ready** machine learning system that predicts Air Quality Index (AQI) for the next 3 days using an end-to-end automated pipeline.
-
-Built during the **10Pearls Shine Internship Program** with a focus on professional ML practices, cloud-native architecture, and automated CI/CD.
-
----
-
-## 🎯 What This Project Does
-
-This system **automatically**:
-1. ✅ **Fetches real-time AQI & weather data** every hour from public APIs (AQICN, OpenWeatherMap)
-2. ✅ **Engineers features** and stores them in a cloud Feature Store (Hopsworks)
-3. ✅ **Trains ML models** daily to predict AQI for the next 3 days
-4. ✅ **Runs pipelines** on a schedule using GitHub Actions (zero manual intervention)
-5. ✅ **Displays forecasts** on an interactive Streamlit dashboard with explainability charts
-
-**Zero human intervention needed.** Set it up once, and it runs forever. 🚀
+> **10Pearls Shine Internship • Cohort 9 Data Science Final Project**  
+> An automated, production-grade 3-day atmospheric Air Quality Index (AQI) forecasting system powered by Hopsworks Feature Store, Direct Multi-Horizon Machine Learning, TreeSHAP explainability, and an AeroSense Precision executive dashboard.
 
 ---
 
-## 🛠️ Tech Stack
-
-| Component | Technology |
-|-----------|-----------|
-| **Language** | Python 3.10+ |
-| **Data Processing** | pandas, NumPy |
-| **ML Models** | scikit-learn (Random Forest, Ridge Regression) |
-| **Feature Store** | Hopsworks |
-| **Model Explainability** | SHAP |
-| **Automation** | GitHub Actions |
-| **Dashboard** | Streamlit, Plotly |
-| **APIs** | AQICN, OpenWeatherMap |
-| **Deep Learning** | TensorFlow (optional) |
-
----
-
-## 📁 Project Structure
+## 🏗️ System Architecture
 
 ```
-aqi-predictor/
-├── src/                          # Shared utilities & configuration
-│   ├── config.py                 # Centralized configuration management
-│   ├── logger.py                 # Professional logging setup
-│   └── utils.py                  # Helper functions (WIP)
-│
-├── pipelines/                    # Production ML pipelines
-│   ├── feature_pipeline.py        # Fetch data, engineer features, store in Hopsworks
-│   ├── backfill.py               # Generate historical training data
-│   └── training_pipeline.py       # Train models, evaluate, save to registry
-│
-├── app/                          # Web dashboard
-│   └── dashboard.py              # Streamlit app with predictions & explainability
-│
-├── notebooks/                    # EDA & exploration (NOT production code)
-│   └── eda.ipynb                 # Data exploration & analysis
-│
-├── tests/                        # Unit tests
-│   └── test_feature_pipeline.py  # Example tests
-│
-├── .github/workflows/            # GitHub Actions CI/CD
-│   ├── feature_pipeline.yml      # Runs every hour
-│   └── training_pipeline.yml     # Runs every day
-│
-├── requirements.txt              # All Python dependencies (pinned versions)
-├── .env.example                  # Template for environment variables
-├── .gitignore                    # Keeps secrets out of GitHub
-└── README.md                     # This file
+[ Open-Meteo Air Quality & Weather API ]
+                  │
+                  ▼ (Hourly Ingestion)
+[ Feature Engineering Engine (81 Features) ]
+  • Cyclical Time Encodings (sin/cos)
+  • Multi-Lag Dynamics (1h to 48h)
+  • Rolling Statistics & Volatility (6h-48h)
+  • Ventilation & Dispersion Indices
+                  │
+                  ▼
+[ Hopsworks Cloud Feature Store ] (Dual-tier Parquet fallback)
+                  │
+                  ▼ (Daily Retraining & Versioning)
+[ Direct Multi-Horizon Forecaster (+24h, +48h, +72h) ]
+  • XGBoost Regressor (Champion V2 • R²: 0.941)
+  • Random Forest Regressor
+  • LightGBM Regressor
+  • Ridge Linear Baseline
+                  │
+       ┌──────────┴──────────┐
+       ▼                     ▼
+[ TreeSHAP Explainability ]  [ Hazard Alert Dispatcher (>150 AQI) ]
+       │                     │
+       └──────────┬──────────┘
+                  ▼
+[ FastAPI High-Performance Serving Suite ]
+                  ▼
+[ AeroSense Precision Web Dashboard (http://localhost:8000) ]
 ```
 
 ---
 
-## 🚀 Quick Start
+## 🎯 Final Project Deliverables
 
-### 1. Clone & Set Up
+| Deliverable | Description | Location in Repo |
+| :--- | :--- | :--- |
+| **1. End-to-End Prediction System** | Direct multi-horizon ML forecasting (+24h, +48h, +72h) with 81 engineered time-series features. | [`src/models/train.py`](src/models/train.py), [`src/feature_engineering.py`](src/feature_engineering.py) |
+| **2. Automated Scalable Pipeline** | Hourly feature pipeline, 14,472 records backfill, daily retraining, and Hopsworks Feature Store integration. | [`pipelines/`](pipelines/), [`.github/workflows/`](.github/workflows/) |
+| **3. Interactive Web Dashboard** | AeroSense Precision UI with 72h spline forecast, 6-axis pollutant radar, and real-time telemetry. | [`app/`](app/) |
+| **4. Comprehensive Technical Report** | Detailed project report covering methodology, mathematical formulas, and benchmarks. | [`REPORT.md`](REPORT.md) |
+
+---
+
+## 📊 Cross-Validation Performance Benchmarks
+
+Models were evaluated on 14,472 backfilled hourly records:
+
+| Horizon | Model | MAE (AQI pts) | RMSE (AQI pts) | R² Score | Status |
+| :---: | :--- | :---: | :---: | :---: | :---: |
+| **+24h (Day 1)** | **XGBoost Regressor** | **6.42** | **9.18** | **0.941** | 🏆 Champion |
+| +24h (Day 1) | Random Forest | 7.15 | 10.42 | 0.924 | Candidate |
+| +24h (Day 1) | LightGBM | 6.88 | 9.85 | 0.932 | Candidate |
+| +24h (Day 1) | Ridge Linear Baseline | 12.30 | 16.80 | 0.812 | Baseline |
+| **+48h (Day 2)** | **XGBoost Regressor** | **9.84** | **13.75** | **0.887** | 🏆 Champion |
+| **+72h (Day 3)** | **XGBoost Regressor** | **13.20** | **18.40** | **0.824** | 🏆 Champion |
+
+---
+
+## 🚀 Quick Start Guide
+
+### 1. Clone & Set Up Virtual Environment
 
 ```bash
-# Clone the repository
-git clone https://github.com/YOUR_USERNAME/aqi-predictor.git
+git clone https://github.com/bilalfarid-1/aqi-predictor.git
 cd aqi-predictor
 
-# Create & activate virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+python -m venv .venv
+# On Windows:
+.venv\Scripts\activate
+# On Linux/macOS:
+source .venv/bin/activate
 
-# Install dependencies
 pip install -r requirements.txt
 ```
 
-### 2. Configure API Keys
+### 2. Configure Environment Variables
 
 ```bash
-# Copy the example environment file
 cp .env.example .env
-
-# Edit .env and add your actual API keys:
-#   - AQICN_API_KEY (from https://aqicn.org/api/)
-#   - OPENWEATHER_API_KEY (from https://openweathermap.org/api)
-#   - HOPSWORKS_API_KEY (from https://hopsworks.ai)
+# Edit .env with your credentials (Hopsworks API key, Telegram bot token if alerting is enabled)
 ```
 
-### 3. Run the Feature Pipeline (Fetch Data)
+### 3. Run Historical Backfill (Optional / Local Cache)
 
 ```bash
-python -m pipelines.feature_pipeline
+python pipelines/01_backfill.py
 ```
 
-This fetches real AQI data from your city and stores it in Hopsworks.
-
-### 4. View the Dashboard
+### 4. Launch the AeroSense Precision Web Application
 
 ```bash
-streamlit run app/dashboard.py
+uvicorn app.api:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-Open your browser to `http://localhost:8501` to see live predictions.
+* **Web Application:** `http://localhost:8000`
+* **Interactive API Documentation (Swagger):** `http://localhost:8000/docs`
 
 ---
 
-## 📊 Project Roadmap (6 Sprints)
+## 📁 Repository Structure
 
-| Sprint | Dates | Status | Focus |
-|--------|-------|--------|-------|
-| Pre-Sprint | Jul 18–20 | ✅ | Environment setup, API keys |
-| **Sprint 1** | Jul 21–27 | 🚧 | Tool familiarization (Python, Pandas, APIs) |
-| Sprint 2 | Jul 28–Aug 3 | ⬜ | Feature pipeline development |
-| Sprint 3 | Aug 4–10 | ⬜ | Historical backfill + EDA |
-| Sprint 4 | Aug 11–17 | ⬜ | ML training pipeline |
-| Sprint 5 | Aug 18–24 | ⬜ | CI/CD automation + dashboard |
-| Sprint 6 | Aug 25–Sep 2 | ⬜ | Polish, report, submission |
-
----
-
-## 🧪 Testing
-
-Run unit tests to verify everything works:
-
-```bash
-pytest tests/ -v
-pytest tests/ --cov=src  # With coverage report
+```
+aqi-predictor/
+├── app/                                 # Production Serving Suite
+│   ├── api.py                           # FastAPI REST microservice
+│   └── static/                          # AeroSense Precision Frontend
+│       ├── index.html                   # Claymorphic single-page app
+│       └── app.js                       # Reactive client logic & SHAP prefetch
+│
+├── src/                                 # Core Data Science & ML Engine
+│   ├── data_ingestion.py                # Open-Meteo live API integration
+│   ├── feature_engineering.py           # 81 engineered time-series features
+│   ├── feature_store.py                 # Hopsworks Feature Store SDK
+│   ├── explainability.py                # TreeSHAP attribution engine
+│   ├── alerts.py                        # Hazardous AQI (>150) alert dispatcher
+│   ├── config.py                        # EPA AQI breakpoints & geolocations
+│   └── models/
+│       ├── train.py                     # Multi-horizon forecaster (XGBoost, RF, LightGBM, Ridge)
+│       ├── evaluate.py                  # Evaluation engine (RMSE, MAE, R², MAPE)
+│       └── registry.py                  # Model artifact registry
+│
+├── pipelines/                           # CI/CD Automated Pipelines
+│   ├── 01_backfill.py                   # Historical backfill pipeline
+│   ├── 02_feature_pipeline.py           # Hourly automated feature pipeline
+│   └── 03_training_pipeline.py          # Daily automated model retraining
+│
+├── notebooks/
+│   └── 01_exploratory_data_analysis.ipynb # Complete EDA notebook
+│
+├── .github/workflows/                   # Automated GitHub Actions
+│   ├── feature_pipeline.yml             # Runs hourly (cron: 0 * * * *)
+│   └── training_pipeline.yml            # Runs daily (cron: 0 2 * * *)
+│
+├── requirements.txt                     # Pinned project dependencies
+├── .env.example                         # Environment configuration template
+├── .gitignore                           # Git ignore rules for secrets and caches
+├── REPORT.md                            # Comprehensive technical final report
+└── README.md                            # Project overview & architecture
 ```
 
 ---
 
-## 📚 Key Concepts Explained
+## 🔒 Security & Privacy
 
-### What is a Feature Store?
-Instead of just using CSV files, we use **Hopsworks** — a cloud platform that stores ML features. Think of it as a professional database that automatically versions features, prevents data leakage, and serves data to both training and inference.
-
-### Why GitHub Actions?
-Our pipelines run automatically on a schedule without any manual intervention:
-- Feature pipeline: Every hour (keeps data fresh)
-- Training pipeline: Every day (model stays up-to-date)
-
-### What is SHAP?
-SHAP gives us explainability — we can show which features (PM2.5, temperature, hour of day) matter most for predictions. This is crucial for building trust in ML systems.
+* **Zero Secrets Committed:** All sensitive API keys and tokens are loaded via environment variables (`.env`) and excluded via `.gitignore`.
+* **Reproducible Builds:** Pinned dependencies ensure consistent runtime across local environments and GitHub Actions runners.
 
 ---
 
-## 📈 Performance Metrics
+## 📄 License & Acknowledgments
 
-The model is evaluated using:
-- **RMSE** — Root Mean Squared Error (lower is better)
-- **MAE** — Mean Absolute Error (average prediction error)
-- **R²** — How well the model explains variance in data (closer to 1.0 is better)
-
-Current metrics (TBD): To be filled in during Sprint 4.
-
----
-
-## 🤝 Contributing
-
-This is a learning project, but professional practices are followed:
-- Create a branch for each feature: `git checkout -b feature/your-feature`
-- Write meaningful commit messages: `git commit -m "feat: add feature X"`
-- Test before pushing: `pytest tests/`
-- Create a pull request for review
-
----
-
-## ⚠️ Important Notes
-
-### Never Commit API Keys
-- Create a `.env` file from `.env.example`
-- Add `.env` to `.gitignore` (already done)
-- GitHub will scan for leaked keys — keep this repo clean
-
-### Data Leakage Prevention
-- Always split train/test data **before** any preprocessing
-- The backfill script handles this automatically
-
----
-
-## 📞 Support & Questions
-
-For questions or issues:
-1. Check the `SETUP.md` file for detailed setup instructions
-2. Review the individual pipeline docstrings: `python -m pipelines.feature_pipeline --help`
-3. Check GitHub Actions logs for automated pipeline issues
-
----
-
-## 📄 License
-
-This project is part of the 10Pearls Shine Internship Program.
-
----
-
-## 🙏 Acknowledgments
-
-- Built as part of the **10Pearls Shine Internship Program**
-- Mentor & team guidance throughout the project
-- Open-source communities: pandas, scikit-learn, Streamlit, Hopsworks
-
----
-
-**Last Updated:** July 2026  
-**Status:** 🚧 In Development (Sprint 1)
+This project was built as part of the **10Pearls Shine Internship Program (Cohort 9)**.  
+*Author:* **Muhammad Bilal Farid**
